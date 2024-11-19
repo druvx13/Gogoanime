@@ -1,9 +1,14 @@
 // const url = window.location.pathname.replace("/", "");
-const url = "naruto-episode-1"
-const apiURl = `https://api-indianime.herokuapp.com`;
+const url = "naruto-episode-1";
 
-// Declaring Gobally
-const apiUrlEpisodeDetail = `${apiURl}/getEpisode/${url}`;
+// Base New API URL
+const apiURl = "https://animeapi-9qlo.onrender.com"; 
+
+// Proxy URL
+const proxyUrl = "https://animedex-proxy.druvx13.workers.dev/?u=";
+
+// Construct the final API URL through the proxy
+const apiUrlEpisodeDetail = `${proxyUrl}${encodeURIComponent(`${apiURl}/getEpisode/${url}`)}`;
 
 function loadEpisodeDetail() {
     async function loadDetail() {
@@ -17,26 +22,24 @@ function loadEpisodeDetail() {
         const animeCategory = document.getElementById('animeCategory');
         animeCategory.setAttribute('href', `${episodeDetail['anime_info']}`);
         const animeTitle = document.getElementById("animeTitle");
-        animeTitle.innerHTML = `${episodeDetail['animenamewithep']}`
+        animeTitle.innerHTML = `${episodeDetail['animenamewithep']}`;
         const animeTitle2 = document.getElementById('animeTitle2');
         animeTitle2.innerHTML = `<h1>${episodeDetail['animenamewithep']} at GogoAnime</h1>`;
 
-
-        //Example - ${episodeDetail['anime_info']} - category/naruto
+        // Example - ${episodeDetail['anime_info']} - category/naruto
         let animeCategoryName = `${episodeDetail['anime_info']}`;
         function animeDetails() {
-            const apiUrlAnimeDetails = `${apiURl}/getAnime/${animeCategoryName.replace("/category/", "")}`
+            const apiUrlAnimeDetails = `${proxyUrl}${encodeURIComponent(`${apiURl}/getAnime/${animeCategoryName.replace("/category/", "")}`)}`;
+            
             async function loadAnimeDetails() {
                 const response = await fetch(apiUrlAnimeDetails);
                 const animeDetail = await response.json();
-                //console.log(animeDetail['name']);
                 animeCategory.innerHTML = `${animeDetail['name']}`;
                 animeCategory.setAttribute('title', `${animeDetail['name']}`);
                 let aboutAnime = `${animeDetail['about']}`;
-                let aboutAnimeFinal = aboutAnime.replace("Plot Summary: ", "")
-                //console.log(aboutAnimeFinal)
-                function metaHeadTag() {
+                let aboutAnimeFinal = aboutAnime.replace("Plot Summary: ", "");
 
+                function metaHeadTag() {
                     let itemprop = document.createElement('meta');
                     itemprop.setAttribute('itemprop', 'image');
                     itemprop.setAttribute('content', `${animeDetail['img_url']}`);
@@ -56,9 +59,6 @@ function loadEpisodeDetail() {
                     ogimage.setAttribute('property', 'og:image');
                     ogimage.setAttribute('content', `${animeDetail['img_url']}`);
                     document.getElementsByTagName('head')[0].appendChild(ogimage);
-
-
-
                 }
                 metaHeadTag();
 
@@ -69,42 +69,34 @@ function loadEpisodeDetail() {
                     let episodeHTML = "";
                     let episodeContent;
                     episodes.forEach(function (element, index) {
-                        if (element == url) {
-                            activeClass = "active"
-                        } else {
-                            activeClass = ""
-                        }
+                        let activeClass = element == url ? "active" : "";
                         episodeContent = `
-                    <li>
-                      <a href="${element}" class="${activeClass}">
-                        <div class="name"><span>EP</span> ${index + 1}</div>
-                        <div class="vien"></div>
-                        <div class="cate">SUB</div>
-                      </a>
-                    </li>
-                    `
+                        <li>
+                            <a href="${element}" class="${activeClass}">
+                                <div class="name"><span>EP</span> ${index + 1}</div>
+                                <div class="vien"></div>
+                                <div class="cate">SUB</div>
+                            </a>
+                        </li>
+                        `;
                         episodeHTML += episodeContent;
-
-                    })
+                    });
                     episode_related.innerHTML = episodeHTML;
-                    //console.log(episodeContent)
 
                     function previousEpisode() {
                         let anime_video_body_episodes_l = document.getElementById('anime_video_body_episodes_l');
                         const epNumber = episodeDetail['ep_num'];
-                        prevEpisode = epNumber - 1
-                        arrayLink = prevEpisode - 1
+                        const prevEpisode = epNumber - 1;
+                        const arrayLink = prevEpisode - 1;
                         
-                        //console.log(prevEpisode)
                         let previosHTML = "";
                         let previosHTMLContent;
                         if (prevEpisode > 0) {
                             previosHTMLContent = `
-                       <a href="${episodes[arrayLink]}">
-                          &lt;&lt; ${animeDetail['name']} Episode ${parseInt(episodeDetail['ep_num']) - 1}
-                       </a>
-                       `
-                            
+                               <a href="${episodes[arrayLink]}">
+                                  &lt;&lt; ${animeDetail['name']} Episode ${parseInt(episodeDetail['ep_num']) - 1}
+                               </a>
+                            `;
                         } else {
                             previosHTMLContent = "";
                         }
@@ -115,74 +107,54 @@ function loadEpisodeDetail() {
 
                     function nextEpisode(){
                         let anime_video_body_episodes_r = document.getElementById('anime_video_body_episodes_r');
-                        //console.log(lastEpisode);
-                        let lastEpisode = animeDetail['episode_id'].length
-                        let nextEpisodeHTML = ""
+                        let lastEpisode = animeDetail['episode_id'].length;
+                        let nextEpisodeHTML = "";
                         let nextEpisodeContent;
                         let currentEpisode = parseInt(episodeDetail['ep_num']);
-                        //console.log(currentEpisode)
                         if (currentEpisode < lastEpisode){
                             nextEpisodeContent = `
                              <a href="${episodes[parseInt(episodeDetail['ep_num'])]}">
                                ${animeDetail['name']} Episode ${parseInt(episodeDetail['ep_num']) + 1} >>
                              </a>
-                            `
+                            `;
                         } else {
-                            nextEpisodeContent = ""
+                            nextEpisodeContent = "";
                         }
                         nextEpisodeHTML += nextEpisodeContent;
                         anime_video_body_episodes_r.innerHTML = nextEpisodeHTML;
                     }
-                    nextEpisode()
-    
+                    nextEpisode();
                 }
-
-                
                 loadEpisode();
-
-              
-
             }
             loadAnimeDetails();
-
-
-
         }
         animeDetails();
-
         return episodeDetail;
-    };
+    }
     loadDetail();
-};
+}
 
 loadEpisodeDetail();
 function loadRecentRelease() {
     async function loadRecent() {
-        const apiUrlRecentReleases = `${apiURl}/getRecent/1`;
+        const apiUrlRecentReleases = `${proxyUrl}${encodeURIComponent(`${apiURl}/getRecent/1`)}`;
         const response = await fetch(apiUrlRecentReleases);
         const recentReleases = await response.json();
-        //console.log(recentReleases);
         const recentEpisodesContainer = document.getElementById('recentEpisodes');
         let recentEpisodesHTML = "";
-        let recentEpisodesContent;
-
         recentReleases.forEach(function (element) {
-            recentEpisodesContent = `
+            recentEpisodesHTML += `
             <li>
-             <a href="${element['r_anime_id']}"
-              title="${element['r_name']}">
-              <div class="thumbnail-recent"
-                style="background: url('${element['r_img_url']}');">
-              </div>
+             <a href="${element['r_anime_id']}" title="${element['r_name']}">
+              <div class="thumbnail-recent" style="background: url('${element['r_img_url']}');"></div>
               ${element['r_name']}
              </a>
-             <a href="${element['r_anime_id']}"
-              title="${element['r_name']}">
+             <a href="${element['r_anime_id']}" title="${element['r_name']}">
               <p class="time_2">${element['episode_num']}</p>
              </a>
             </li>
             `;
-            recentEpisodesHTML += recentEpisodesContent;
         });
         recentEpisodesContainer.innerHTML = recentEpisodesHTML;
     }
