@@ -3,8 +3,17 @@ require('../php/info.php');
 
 $id = $_GET['id'];
 
-// Fetch JSON data from the GoGoAnime API endpoint
-$json = file_get_contents("$apiLink/vidcdn/watch/$id");
+// Proxy URL
+$proxyUrl = 'https://animedex-proxy.druvx13.workers.dev/?u=';
+
+// Construct the API URL
+$apiUrl = "$apiLink/vidcdn/watch/$id";
+
+// Encode the API URL to pass it through the proxy
+$proxyApiUrl = $proxyUrl . urlencode($apiUrl);
+
+// Fetch JSON data through the proxy
+$json = file_get_contents($proxyApiUrl);
 $video = json_decode($json, true);
 
 if (isset($video['sources']) && !empty($video['sources'])) {
