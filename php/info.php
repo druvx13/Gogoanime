@@ -10,11 +10,11 @@ if (date("d") > 15) {
     $apiLink = "https://animeapi-9qlo.onrender.com"; // Same API for the second condition
 }
 
-// Define the new proxy URL
-$proxy_url = "https://animedex-proxy.druvx13.workers.dev/?u="; // Your new proxy URL
+// Define the new prxy URL
+$aapxy_url = "https://gogo.druvx13.workers.dev/?u="; // Your new prxy URL
 
-// Apply the proxy to the API link (the URL needs to be encoded for the proxy to work correctly)
-$proxied_api_url = $proxy_url . urlencode($apiLink);
+// Apply the prxy to the API link (the URL needs to be encoded for the prxy to work correctly)
+$aapxyed_api_url = $aapxy_url . urlencode($apiLink);
 
-echo "Proxied API URL: " . $proxied_api_url; // For debugging, print the final proxied URL
+echo "Prxied API URL: " . $aapxyed_api_url; // For debugging, print the final prxied URL
 ?>
