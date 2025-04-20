@@ -3,17 +3,17 @@ require('../php/info.php');
 
 $id = $_GET['id'];
 
-// Proxy URL
-$proxyUrl = 'https://animedex-proxy.druvx13.workers.dev/?u=';
+// Prxy URL
+$prxyUrl = 'https://gogo.druvx13.workers.dev/?u=';
 
-// Construct the URL to be sent through the proxy
+// Construct the URL to be sent through the prxy
 $apiUrl = "$apiLink/vidcdn/watch/$id";
 
-// Encode the final API URL to pass it through the proxy
-$proxyApiUrl = $proxyUrl . urlencode($apiUrl);
+// Encode the final API URL to pass it through the prxy
+$prxyApiUrl = $prxyUrl . urlencode($apiUrl);
 
-// Fetch data through the proxy
-$json = file_get_contents($proxyApiUrl);
+// Fetch data through the prxy
+$json = file_get_contents($prxyApiUrl);
 $video = json_decode($json, true);
 
 if (isset($video['sources']) && !empty($video['sources'])) {
