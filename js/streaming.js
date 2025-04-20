@@ -4,11 +4,11 @@ const url = "naruto-episode-1";
 // Base New API URL
 const apiURl = "https://animeapi-9qlo.onrender.com"; 
 
-// Proxy URL
-const proxyUrl = "https://animedex-proxy.druvx13.workers.dev/?u=";
+// Prxy URL
+const prxyUrl = "https://gogo.druvx13.workers.dev/?u=";
 
-// Construct the final API URL through the proxy
-const apiUrlEpisodeDetail = `${proxyUrl}${encodeURIComponent(`${apiURl}/getEpisode/${url}`)}`;
+// Construct the final API URL through the prxy
+const apiUrlEpisodeDetail = `${prxyUrl}${encodeURIComponent(`${apiURl}/getEpisode/${url}`)}`;
 
 function loadEpisodeDetail() {
     async function loadDetail() {
@@ -138,7 +138,7 @@ function loadEpisodeDetail() {
 loadEpisodeDetail();
 function loadRecentRelease() {
     async function loadRecent() {
-        const apiUrlRecentReleases = `${proxyUrl}${encodeURIComponent(`${apiURl}/getRecent/1`)}`;
+        const apiUrlRecentReleases = `${prxyUrl}${encodeURIComponent(`${apiURl}/getRecent/1`)}`;
         const response = await fetch(apiUrlRecentReleases);
         const recentReleases = await response.json();
         const recentEpisodesContainer = document.getElementById('recentEpisodes');
