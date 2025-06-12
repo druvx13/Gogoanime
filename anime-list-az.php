@@ -13,14 +13,14 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="<?=$base_url?>/img/favicon.ico">
+    <link rel="shortcut icon" href="<?php echo $base_url?>/img/favicon.ico">
 
     <title>List All Anime at Gogoanime | Anime List</title>
 
     <meta name="robots" content="index, follow" />
     <meta name="description" content="List All Anime  at Gogoanime | Anime List">
     <meta name="keywords" content="List All Anime  at Gogoanime | Anime List">
-    <meta itemprop="image" content="<?=$base_url?>/img/logo.png" />
+    <meta itemprop="image" content="<?php echo $base_url?>/img/logo.png" />
 
     <meta property="og:site_name" content="Gogoanime" />
     <meta property="og:locale" content="en_US" />
@@ -28,17 +28,17 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
     <meta property="og:title" content="List All Anime at Gogoanime | Anime List" />
     <meta property="og:description" content="List All Anime  at Gogoanime | Anime List">
     <meta property="og:url" content="" />
-    <meta property="og:image" content="<?=$base_url?>/img/logo.png" />
-    <meta property="og:image:secure_url" content="<?=$base_url?>/img/logo.png" />
+    <meta property="og:image" content="<?php echo $base_url?>/img/logo.png" />
+    <meta property="og:image:secure_url" content="<?php echo $base_url?>/img/logo.png" />
 
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:title" content="List All Anime at Gogoanime | Anime List" />
     <meta property="twitter:description" content="List All Anime  at Gogoanime | Anime List" />
 
-    <link rel="canonical" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-    <link rel="alternate" hreflang="en-us" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-    <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/style.css" />
-    <script type="text/javascript" src="<?=$base_url?>/js/libraries/jquery.js"></script>
+    <link rel="canonical" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+    <link rel="alternate" hreflang="en-us" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url?>/css/style.css" />
+    <script type="text/javascript" src="<?php echo $base_url?>/js/libraries/jquery.js"></script>
     <?php require_once('./php/advertisments/popup.html'); ?>
     <script>
         var base_url = 'https://' + document.domain + '/';
@@ -160,7 +160,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
                                   foreach($json as $animeList)  { 
                                 ?>
                                     
-                                    <li title='<?php $desc = $animeList['liTitle']; echo htmlspecialchars($desc);?>'> <a href="/category/<?=$animeList['animeId']?>" title=""><?=$animeList['animeTitle']?></a></li>
+                                    <li title='<?php $desc = $animeList['liTitle']; echo htmlspecialchars($desc);?>'> <a href="/category/<?php echo $animeList['animeId']?>" title=""><?php echo $animeList['animeTitle']?></a></li>
                                 <?php } ?>
                                 </ul>
                                 <div class="clr"></div>
@@ -277,12 +277,12 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
     <div id="off_light"></div>
     <div class="clr"></div>
     <div class="mask"></div>
-        <script type="text/javascript" src="<?=$base_url?>/js/files/combo.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/video.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
+        <script type="text/javascript" src="<?php echo $base_url?>/js/files/combo.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url?>/js/files/video.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
     <?php include('./php/include/footer.php')?>
 
-    <script type="text/javascript" src="<?=$base_url?>/js/files/jqueryTooltip.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url?>/js/files/jqueryTooltip.js"></script>
     <script type="text/javascript">
         $(".listing li[title]").tooltip({ offset: [10, 200], effect: 'slide', predelay: 300 }).dynamic({ bottom: { direction: 'down', bounce: true } });
     </script>

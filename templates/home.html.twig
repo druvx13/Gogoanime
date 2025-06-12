@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ BASE_URL }}/img/favicon.ico">
+    <title>Watch anime online, English anime online - {{ WEBSITE_NAME }}</title>
+
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
+    <meta name="keywords" content="gogoanime,watch anime, anime online, free anime, english anime, sites to watch anime">
+    <meta itemprop="image" content="{{ BASE_URL }}/img/logo.png" />
+
+    <meta property="og:site_name" content="{{ WEBSITE_NAME }}" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ WEBSITE_NAME }} | Watch anime online, English anime online HD" />
+    <meta property="og:description" content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
+    <meta property="og:url" content="" /> {# Or pass current URL if needed #}
+    <meta property="og:image" content="{{ BASE_URL }}/img/logo.png" />
+    <meta property="og:image:secure_url" content="{{ BASE_URL }}/img/logo.png" />
+
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="{{ WEBSITE_NAME }} | Watch anime online, English anime online HD" />
+    <meta property="twitter:description" content="Watch anime online in English. You can watch free series and movies online and English subtitle." />
+
+    <link rel="canonical" href="{{ BASE_URL }}" /> {# Or pass current URL if needed #}
+    <link rel="alternate" hreflang="en-us" href="{{ BASE_URL }}" /> {# Or pass current URL if needed #}
+
+    <link rel="stylesheet" type="text/css" href="{{ BASE_URL }}/css/style.css" />
+    <script type="text/javascript" src="{{ BASE_URL }}/js/libraries/jquery.js"></script>
+    <script>
+        var base_url = 'http://' + document.domain + '/'; // This might need to be {{ BASE_URL }} depending on usage
+        var base_url_cdn_api = 'https://ajax.gogocdn.net/';
+        var api_anclytic = 'https://ajax.gogocdn.net/anclytic-ajax.html';
+    </script>
+    <script type="text/javascript" src="https://cdn.gogocdn.net/files/gogo/js/main.js?v=6.9"></script>
+
+    {% include 'parts/popup.html.twig' %}
+</head>
+<body>
+    <div class="clr"></div>
+    <div id="wrapper_inside">
+        <div id="wrapper">
+            <div id="wrapper_bg">
+                {% include 'layout/header.html.twig' %}
+                <section class="content">
+                    <section class="content_left">
+                        <h1 class="seohiden">Gogoanime | Watch anime online, English anime online HD</h1>
+                        <!-- Recent Release--->
+                        <div class="main_body">
+                            <div id="load_recent_release">
+                                <input type="hidden" id="type" name="type" value="1" />
+                                <div class="anime_name recent_release">
+                                    <i class="icongec-recent_release i_pos"></i>
+                                    <h2><a href="javascript:void(0)" class="dub active" rel="1">Recent Release</a> <span
+                                            style="padding:0 10px; color:#010101;">|</span> <a href="javascript:void(0)"
+                                            class="dub " rel="2">DUB</a><span class="chinese"
+                                            style="padding:0 10px; color:#010101;">|</span> <a href="javascript:void(0)"
+                                            class="dub chinese " rel="3">Chinese</a></h2>
+                                    <div class="anime_name_pagination intro">
+                                        <div class="pagination recent">
+                                            {# Assuming pagination_html is passed if needed, or handle pagination differently #}
+                                            {{ pagination_html|raw }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="last_episodes loaddub">
+                                    <ul class="items">
+                                        {% for recentRelease in recent_release_items %}
+                                        <li>
+                                            <div class="img">
+                                                <a href="/{{ recentRelease.episodeId }}" title="{{ recentRelease.name }}">
+                                                    <img src="{{ recentRelease.imgUrl }}" alt="{{ recentRelease.name }}" />
+                                                    <div class="type ic-SUB"></div> {# Assuming SUB, pass type if dynamic #}
+                                                </a>
+                                            </div>
+                                            <p class="name"><a href="/{{ recentRelease.episodeId }}" title="{{ recentRelease.name }}">{{ recentRelease.name }}</a></p>
+                                            <p class="episode">Episode {{ recentRelease.episodeNum }}</p>
+                                        </li>
+                                        {% else %}
+                                        <li>No recent releases found.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr"></div>
+                        <!--/ Recent Release--->
+                        <!-- Featured Comedy / Romance Anime--->
+                        <div class="main_body">
+                            <div id="load_popular_ongoing">
+                                {# Content for popular/ongoing will be loaded by JS or passed as a variable #}
+                                {{ popular_ongoing_content }} {# Removed |raw as it's just an HTML comment #}
+                            </div>
+                        </div>
+                        <div class="clr"></div> <!-- /Featured Comedy / Romance Anime--->
+
+                        <!-- Recently Added Series--->
+                        <div class="main_body none"> {# Consider if 'none' class should be conditional #}
+                            <div class="anime_name added_series">
+                                <i class="icongec-added_series i_pos"></i>
+                                <h2>Recently Added Series</h2>
+                            </div>
+                            <div class="added_series_body final">
+                                <ul class="listing">
+                                {% for recentlyAdded in recently_added_series %}
+                                    <li>
+                                        <a href="/{{ recentlyAdded.animeId }}" title="{{ recentlyAdded.animeName }}">{{ recentlyAdded.animeName }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>No recently added series.</li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- / Recently Added Series--->
+                    </section>
+                    <section class="content_right">
+                        <div class="headnav_center"></div> {# Static or dynamic? Assume static for now #}
+                        <div class="main_body">
+                            <div class="main_body_black">
+                                <div class="anime_name anime_info">
+                                    <i class="icongec-anime_info i_pos"></i>
+                                    <div class="topview">
+                                        <div class="tab">
+                                            <div class="tab_icon one1" onclick="loadTopViews(this, 1)">Day</div>
+                                            <div class="tab_icon one2" onclick="loadTopViews(this, 2)">Week</div>
+                                            <div class="tab_icon one3" onclick="loadTopViews(this, 3)">Month</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="topview" id="load-anclytic">
+                                    <div class="clr"></div>
+                                    <div class="movies_show">
+                                        <div id="laoding">
+                                            <div class="loaders"></div>
+                                        </div>
+                                        {# These will be populated by JS: loadTopViews #}
+                                        <div id="load_topivews" class="views1"></div>
+                                        <div id="load_topivews" class="views2"></div>
+                                        <div id="load_topivews" class="views3"></div>
+                                    </div>
+                                    <div class="clr"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr"></div>
+                        <div class="main_body">
+                            <div class="main_body_black">
+                                <div class="anime_name ongoing">
+                                    <i class="icongec-ongoing i_pos"></i>
+                                    <h2>ongoing series</h2>
+                                </div>
+                                <div class="series">
+                                    <div id="scrollbar2">
+                                        <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                                        <div class="viewport">
+                                            <div class="overview">
+                                                <nav class="menu_series cron">
+                                                    <ul>
+                                                    {% for ongoingSerie in ongoing_series %}
+                                                        <li>
+                                                           <a href="/{{ ongoingSerie.animeId }}" title="{{ ongoingSerie.animeName }}">{{ ongoingSerie.animeName }}</a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li>No ongoing series.</li>
+                                                    {% endfor %}
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <style type="text/css">
+                            #scrollbar2 .viewport { height: 600px !important; }
+                        </style>
+                        <div class="main_body">
+                            <div class="main_body_black">
+                                <div class="anime_name genre">
+                                    <i class="icongec-genre i_pos"></i>
+                                    <h2>Genres</h2>
+                                </div>
+                                <div class="recent">
+                                    <nav class="menu_series genre right">
+                                        {% include 'parts/sidebar_genre.html.twig' %}
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        {% include 'parts/sub-category.html.twig' %}
+                    </section>
+                </section>
+                <div class="clr"></div>
+                {% include 'layout/footer.html.twig' %}
+            </div>
+        </div>
+    </div>
+    <div id="off_light"></div>
+    <div class="clr"></div>
+    <div class="mask"></div>
+    <script type="text/javascript" src="{{ BASE_URL }}/js/files/combo.js"></script>
+    <script type="text/javascript" src="https://anikatsu.ga/files/js/video.js"></script> {# Consider local/reliable CDN #}
+    <script type="text/javascript" src="{{ BASE_URL }}/js/files/jquery.tinyscrollbar.min.js"></script>
+    <script>
+        // Ensure LoadFilmOngoing is defined or loaded externally
+        if (typeof LoadFilmOngoing === 'function') {
+            LoadFilmOngoing(1);
+        }
+        if (document.getElementById('scrollbar2')) {
+            $('#scrollbar2').tinyscrollbar();
+        }
+    </script>
+</body>
+</html>

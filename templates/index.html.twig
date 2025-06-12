@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="shortcut icon" href="{{ BASE_URL }}/img/favicon.ico">
+
+    <title>Watch anime online, English anime online - {{ WEBSITE_NAME }}</title>
+
+    <meta name="robots" content="index, follow" />
+    <meta name="description"
+        content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
+    <meta name="keywords"
+        content="gogoanime,watch anime, anime online, free anime, english anime, sites to watch anime">
+    <meta itemprop="image" content="{{ BASE_URL }}/img/logo.png" />
+
+    <meta property="og:site_name" content="{{ WEBSITE_NAME }}" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ WEBSITE_NAME }} | Watch anime online, English anime online HD" />
+    <meta property="og:description"
+        content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="{{ BASE_URL }}/img/logo.png" />
+    <meta property="og:image:secure_url" content="{{ BASE_URL }}/img/logo.png" />
+
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="{{ WEBSITE_NAME }} | Watch anime online, English anime online HD" />
+    <meta property="twitter:description"
+        content="Watch anime online in English. You can watch free series and movies online and English subtitle." />
+
+    <link rel="canonical" href="{{ BASE_URL }}" />
+    <link rel="alternate" hreflang="en-us" href="{{ BASE_URL }}" />
+
+
+
+    <link rel="stylesheet" type="text/css" href="{{ BASE_URL }}/css/style.css" />
+
+    <script type="text/javascript" src="{{ BASE_URL }}/js/libraries/jquery.js"></script>
+    <script>
+        var base_url = 'http://' + document.domain + '/';
+        var base_url_cdn_api = 'https://ajax.gogocdn.net/';
+        var api_anclytic = 'https://ajax.gogocdn.net/anclytic-ajax.html';
+    </script>
+    <script type="text/javascript" src="https://cdn.gogocdn.net/files/gogo/js/main.js"></script>
+
+    {% include 'parts/popup.html.twig' %}
+
+</head>
+
+
+  <body>
+    <div class="clr"></div>
+    <div id="wrapper_inside">
+      <div id="wrapper">
+        <div id="wrapper_bg">
+          {% include "layout/header.html.twig" %}
+
+          <div class="main_body">
+            <div style="color:#FFF;padding:18px;">
+              <h1 style="text-transform:uppercase;font-size:20px;">{{ WEBSITE_NAME }} - Best site to watch anime online for FREE.</h1>
+              <p>When we create gogoanime, we hope for anime fans to have a free anime streaming site with good design and easy to use. Understand the importance of user feedback, as time passes by, we’ve collected all your ideas and requests to make a better version of gogoanime.</p>
+              <p>To avoid multiple blocking, we also decided to moved to gogoanime as {{ WEBSITE_NAME }} With a new domain and better user experience for our beloved anime fans in the world.</p>
+              <h6 style="font-size:18px;">What's {{ WEBSITE_NAME }}?</h6>
+              <p>{{ WEBSITE_NAME }} is a completely free streaming site for users to watch or download anime in HD quality with English subtitles or dubbing. A vast database, fast update and no registering requirement.</p>
+              <h6 style="font-size:18px;>Is {{ WEBSITE_NAME }} safe?</h6>
+              <p>Absolutely! We make changes to improve user experience. {{ WEBSITE_NAME }} is completely safe. If you find any ads that are suspicious, please forward us the information and we will remove it. Hope you will understand that the advertising is needed to maintain the site.</p>
+              <h6 style="font-size:18px;>Why should I choose {{ WEBSITE_NAME }} ?</h6>
+              <p>Streaming experience: fast loading and easy to download. We have all the top line streaming servers for you to choose.</p>
+              <p>Content library: We have all the anime here, from old anime to the new one. You can find all the genres you like such as action; drama; fiction; mystery,... You can also request your favorite anime at gogotaku.info.</p>
+              <p>Update: Vast content and updating hourly is always a strong point of gogoanime as well as {{ WEBSITE_NAME }}.</p>
+              <p>Quality/Resolution: We provide high-quality anime in multiple resolutions and allow users to choose the one that suits their preferences and device capabilities</p>
+              <p>Customer care: Users can always contact us for help or query by clicking on contact us or report the episode.</p>
+              <p>Device compatibility: {{ WEBSITE_NAME }} work well on both desktop and mobile devices. Fell free to enjoy your favorite anime on any device you want.</p>
+              <p>Therefore, if you are looking for a great and safe website to watch anime for free. Let’s try {{ WEBSITE_NAME }}. And if you like us, please help spread the word to others and don’t forget to bookmark our site.</p>
+              <p>Many thanks!</p>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin:20px 0;">
+            <a href="{{ BASE_URL }}/home" style="background:#000;color:#ffc119;font-size:18px;border:1px solid #fff;padding:10px 25px;border-radius:20px;">GO TO HOMEPAGE</a>
+          </div>
+
+
+          <div class="clr"></div>
+          {% include 'layout/footer.html.twig' %}
+        </div>
+      </div>
+    </div>
+    <div id="off_light"></div>
+    <div class="clr"></div>
+    <div class="mask"></div>
+    <script type="text/javascript" src="{{ BASE_URL }}/js/files/combo.js"></script>
+    <script type="text/javascript" src="{{ BASE_URL }}/js/files/video.js"></script>
+    <script type="text/javascript" src="{{ BASE_URL }}/js/files/jquery.tinyscrollbar.min.js"></script>
+    <script>
+      if(document.getElementById('scrollbar2')){
+        $('#scrollbar2').tinyscrollbar();
+      }
+    </script>
+  </body>
+</html>

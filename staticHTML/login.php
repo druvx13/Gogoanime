@@ -3,41 +3,41 @@
 <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="<?=$base_url?>/img/favicon.ico">
+        <link rel="shortcut icon" href="<?php echo $base_url?>/img/favicon.ico">
 
-        <title><?=$website_name?> | Login</title>
+        <title><?php echo $website_name?> | Login</title>
 
         <meta name="robots" content="index, follow" />
         <meta name="description" content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
         <meta name="keywords" content="gogoanime,watch anime, anime online, free anime, english anime, sites to watch anime">
-        <meta itemprop="image" content="<?=$base_url?>/img/logo.png" />
+        <meta itemprop="image" content="<?php echo $base_url?>/img/logo.png" />
 
         <meta property="og:site_name" content="Gogoanime" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="<?=$website_name?> | Login" />
+        <meta property="og:title" content="<?php echo $website_name?> | Login" />
         <meta property="og:description" content="Watch anime online in English. You can watch free series and movies online and English subtitle.">
         <meta property="og:url" content="" />
-        <meta property="og:image" content="<?=$base_url?>/img/logo.png" />
-        <meta property="og:image:secure_url" content="<?=$base_url?>/img/logo.png" />
+        <meta property="og:image" content="<?php echo $base_url?>/img/logo.png" />
+        <meta property="og:image:secure_url" content="<?php echo $base_url?>/img/logo.png" />
 
         <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content="<?=$website_name?> | Login" />
+        <meta property="twitter:title" content="<?php echo $website_name?> | Login" />
         <meta property="twitter:description" content="Watch anime online in English. You can watch free series and movies online and English subtitle." />
 
-        <link rel="canonical" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-        <link rel="alternate" hreflang="en-us" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+        <link rel="canonical" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+        <link rel="alternate" hreflang="en-us" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
 
 
 
-        <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/style.css" />
-        <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/user_auth.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url?>/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url?>/css/user_auth.css" />
     
-    <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/user.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url?>/css/user.css" />
 
         <?php require_once('../php/advertisments/popup.html'); ?>
 
-        <script type="text/javascript" src="<?=$base_url?>/js/libraries/jquery.js"></script>
+        <script type="text/javascript" src="<?php echo $base_url?>/js/libraries/jquery.js"></script>
         <script>
                 var base_url = 'https://' + document.domain + '/';
                 var base_url_cdn_api = 'https://ajax.gogocdn.net/';
@@ -73,7 +73,7 @@
                     <p class="myptag">* this is just a template.<br>No function has been implemented. Feel free to modify the code!</p>
 
 
-                    <a href="<?=$base_url?>" class="btn-google">
+                    <a href="<?php echo $base_url?>" class="btn-google">
                         <span>
                             <img src="https://gogoanime3.co/img/google.png" alt="google" />                        </span>
                         Log in with Google
@@ -131,9 +131,9 @@
 <div id="off_light"></div>
 <div class="clr"></div>
 <div class="mask"></div>
-<script type="text/javascript" src="<?=$base_url?>/js/files/combo.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/video.js"></script>
-        <script type="text/javascript" src="<?=$base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url?>/js/files/combo.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url?>/js/files/video.js"></script>
+        <script type="text/javascript" src="<?php echo $base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
         <?php include('../php/include/footer.php')?>
 
 </body>

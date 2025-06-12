@@ -1,20 +1,21 @@
-<?php 
-$base_url = "//{$_SERVER['SERVER_NAME']}";
-$website_name = "GogoAnime";
+<?php
 
-// Define your API link
-$apiLink = "https://animeapi-9qlo.onrender.com"; // Add the API URL with a trailing slash
+// Load the centralized configuration
+require_once __DIR__ . '/../config/config.php';
 
-// Check the day and update the API link if needed
-if (date("d") > 15) {
-    $apiLink = "https://animeapi-9qlo.onrender.com"; // Same API for the second condition
-}
+// The variables like $base_url, $website_name, $apiLink, $aapxy_url, $aapxyed_api_url
+// are now available as constants: BASE_URL, WEBSITE_NAME, API_LINK, AAPXY_URL, AAPXYED_API_URL.
+// Any files that included info.php and used these variables will need to be updated
+// to use the constant names instead.
 
-// Define the new prxy URL
-$aapxy_url = "https://gogo.druvx13.workers.dev/?u="; // Your new prxy URL
+// For convenience during transition, we can redefine them as global variables here,
+// but the goal is to eventually phase out the use of these global variables.
+global $base_url, $website_name, $apiLink, $aapxy_url, $aapxyed_api_url;
 
-// Apply the prxy to the API link (the URL needs to be encoded for the prxy to work correctly)
-$aapxyed_api_url = $aapxy_url . urlencode($apiLink);
+$base_url = BASE_URL;
+$website_name = WEBSITE_NAME;
+$apiLink = API_LINK;
+$aapxy_url = AAPXY_URL;
+$aapxyed_api_url = AAPXYED_API_URL;
 
-echo "Prxied API URL: " . $aapxyed_api_url; // For debugging, print the final prxied URL
 ?>

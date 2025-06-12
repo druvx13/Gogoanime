@@ -1,323 +1,99 @@
-<?php 
-require_once('./php/info.php');
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
+<?php
+require_once __DIR__ . '/php/info.php'; // Loads config, sets up Twig
+
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+// Determine the active letter for the filter. Example: from a URL like /anime-list/A or /anime-list?aph=A
+$active_char_from_uri = 'All'; // Default
+if (isset($_SERVER['REQUEST_URI'])) {
+    $path_parts = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+    if (count($path_parts) > 0 && preg_match('/^anime-list-([A-Z])$/i', $path_parts[0], $matches)) {
+        $active_char_from_uri = strtoupper($matches[1]);
+    } elseif (isset($_GET['aph'])) {
+        $active_char_from_uri = strtoupper(trim($_GET['aph']));
+        if (!preg_match('/^[A-Z]$/', $active_char_from_uri)) {
+            $active_char_from_uri = 'All';
+        }
+    }
+}
+
+
+// --- Data Fetching using ApiClient ---
+$apiClient = \App\Utils\ConfigLoader::getApiClient();
+$anime_list_items = [];
+$pagination_html = '';
+
+if ($apiClient) {
+    // TODO: ApiClient::getAllAnime currently doesn't support character filtering.
+    // For now, we fetch all for the page, then filter if a character is selected.
+    // This is inefficient and should be handled by the API in a real scenario.
+    $allAnimeForPage = $apiClient->getAllAnime($page);
+
+    if ($active_char_from_uri != 'All' && !empty($active_char_from_uri)) {
+        $anime_list_items = array_filter($allAnimeForPage, function($item) use ($active_char_from_uri) {
+            return stripos($item['animeTitle'], $active_char_from_uri) === 0;
+        });
+    } else {
+        $anime_list_items = $allAnimeForPage;
+    }
+
+    // Simple placeholder for pagination (ApiClient doesn't provide total pages yet)
+    $pagination_html = "<ul class='pagination-list'>";
+    $totalPagesMock = 3; // Assume 3 total pages for mock
+    for ($i = 1; $i <= $totalPagesMock; $i++) {
+        $selected_class = ($i == $page) ? "selected" : "";
+        $urlSuffix = ($active_char_from_uri != 'All') ? "&aph=$active_char_from_uri" : "";
+        // Adjust href for pretty URLs if anime-list-X is used
+        if ($active_char_from_uri != 'All' && preg_match('/^anime-list-([A-Z])$/i', $path_parts[0])) {
+             $baseLink = "/anime-list-" . $active_char_from_uri;
+             $pagination_html .= "<li class='$selected_class'><a href='$baseLink?page=$i' data-page='$i'>$i</a></li>";
+        } else {
+             $pagination_html .= "<li class='$selected_class'><a href='?page=$i$urlSuffix' data-page='$i'>$i</a></li>";
+        }
+    }
+    $pagination_html .= "</ul>";
+
+} else {
+    error_log("ApiClient not available in anime-list.php.");
+    $pagination_html = "<li>Could not load pagination.</li>";
+}
+// --- End Data Fetching ---
+
+
+// --- Capture Dynamic/Static Includes ---
+$recent_release_content = '';
+if (file_exists(__DIR__ . '/php/include/recentRelease.php')) {
+    ob_start();
+    include __DIR__ . '/php/include/recentRelease.php';
+    $recent_release_content = ob_get_clean();
+}
+
+// $subcategory_content is no longer captured here, it's included in Twig template
+// --- End Capture Includes ---
+
+// Prepare variables for Twig
+$template_vars = [
+    'BASE_URL' => BASE_URL,
+    'WEBSITE_NAME' => WEBSITE_NAME,
+    'request_uri' => $_SERVER['REQUEST_URI'],
+    'anime_list_items' => array_values($anime_list_items), // Re-index array after filter
+    'pagination_html' => $pagination_html,
+    'active_char' => $active_char_from_uri,
+    'recent_release_content' => $recent_release_content,
+    // 'subcategory_content' => $subcategory_content, // Removed
+];
+
+// Render the Twig template
+try {
+    $twig = \App\Utils\ConfigLoader::getTwig();
+    if ($twig) {
+        echo $twig->render('anime-list.html.twig', $template_vars);
+    } else {
+        error_log("Failed to get Twig instance from ConfigLoader in anime-list.php.");
+        echo "Error: Could not initialize the templating engine.";
+    }
+} catch (\Throwable $e) {
+    error_log("Error in anime-list.php: " . $e->getMessage() . " Trace: " . $e->getTraceAsString());
+    echo "An error occurred while loading the page. Please try again later.";
+}
+
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="<?=$base_url?>/img/favicon.ico">
-
-    <title>List All Anime at Gogoanime | Anime List</title>
-
-    <meta name="robots" content="index, follow" />
-    <meta name="description" content="List All Anime  at Gogoanime | Anime List">
-    <meta name="keywords" content="List All Anime  at Gogoanime | Anime List">
-    <meta itemprop="image" content="<?=$base_url?>/img/logo.png" />
-
-    <meta property="og:site_name" content="Gogoanime" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="List All Anime at Gogoanime | Anime List" />
-    <meta property="og:description" content="List All Anime  at Gogoanime | Anime List">
-    <meta property="og:url" content="" />
-    <meta property="og:image" content="<?=$base_url?>/img/logo.png" />
-    <meta property="og:image:secure_url" content="<?=$base_url?>/img/logo.png" />
-
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="List All Anime at Gogoanime | Anime List" />
-    <meta property="twitter:description" content="List All Anime  at Gogoanime | Anime List" />
-
-    <link rel="canonical" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-    <link rel="alternate" hreflang="en-us" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-    <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/style.css" />
-    <script type="text/javascript" src="<?=$base_url?>/js/libraries/jquery.js"></script>
-    <?php require_once('./php/advertisments/popup.html'); ?>
-    <script>
-        var base_url = 'https://' + document.domain + '/';
-        var base_url_cdn_api = 'https://ajax.gogocdn.net/';
-        var api_anclytic = 'https://ajax.gogocdn.net/anclytic-ajax.html';
-    </script>
-    <script type="text/javascript" src="https://cdn.gogocdn.net/files/gogo/js/main.js?v=7.1"></script>
-</head>
-
-<body>
-    <div class="clr"></div>
-    <div id="wrapper_inside">
-        <div id="wrapper">
-            <div id="wrapper_bg">
-                <?php require_once('./php/include/header.php'); ?>
-                <section class="content">
-                    <section class="content_left">
-
-                        <div class="main_body">
-                            <div class="anime_name anime_list">
-                                <i class="icongec-anime_list i_pos"></i>
-                                <h2>ANIME LIST</h2>
-                                <div class="anime_name_pagination">
-                                    <div class="pagination">
-                                    <ul class='pagination-list'><?php $pagination = file_get_contents("$apiLink/anime-list-page?page=$page");$pagination = json_decode($pagination, true); echo str_replace("active","selected",$pagination['pagination']) ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list_search">
-                                <ul>
-                                    <li class="first-char">
-                                        <a href="/anime-list.html" rel="all" class="active">All</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-A" rel="" class="">A</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-B" rel="" class="">B</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-C" rel="" class="">C</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-D" rel="" class="">D</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-E" rel="" class="">E</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-F" rel="" class="">F</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-G" rel="" class="">G</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-H" rel="" class="">H</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-I" rel="" class="">I</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-J" rel="" class="">J</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-K" rel="" class="">K</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-L" rel="" class="">L</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-M" rel="" class="">M</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-N" rel="" class="">N</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-O" rel="" class="">O</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-P" rel="" class="">P</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-Q" rel="" class="">Q</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-R" rel="" class="">R</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-S" rel="" class="">S</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-T" rel="" class="">T</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-U" rel="" class="">U</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-V" rel="" class="">V</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-W" rel="" class="">W</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-X" rel="" class="">X</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-Y" rel="" class="">Y</a>
-                                    </li>
-                                    <li class="first-char">
-                                        <a href="/anime-list-Z" rel="" class="">Z</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="anime_list_body">
-                                <ul class="listing">
-                                <?php
-                                  $json = file_get_contents("$apiLink/animeList?page=$page");
-                                  $json = json_decode($json, true);
-                                  foreach($json as $animeList)  { 
-                                ?>
-                                    
-                                    <li title='<?php $desc = $animeList['liTitle']; echo htmlspecialchars($desc);?>'> <a href="/category/<?=$animeList['animeId']?>" title=""><?=$animeList['animeTitle']?></a></li>
-                                <?php } ?>
-                                </ul>
-                                <div class="clr"></div>
-                            </div>
-                        </div>
-
-                    </section>
-                    <section class="content_right">
-                    <div class="headnav_center"></div>
-                        
-
-                        <div class="clr"></div>
-                        <div class="main_body">
-                            <div class="main_body_black">
-                                <div class="anime_name ongoing">
-                                    <i class="icongec-ongoing i_pos"></i>
-                                    <h2>RECENT RELEASE</h2>
-                                </div>
-                                <div class="recent">
-                                    <!-- begon -->
-                                    <div id="scrollbar2">
-                                        <div class="scrollbar">
-                                            <div class="track">
-                                                <div class="thumb">
-                                                    <div class="end"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="viewport">
-                                            <div class="overview">
-                                            <?php require_once('./php/include/recentRelease.php'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- tao thanh cuon 1-->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clr"></div>
-                        <div id="load_ads_2">
-                            <div id="media.net sticky ad" style="display: inline-block">
-                            </div>
-                        </div>
-                        <style type="text/css">
-                            #load_ads_2 {
-                                width: 300px;
-                            }
-
-                            #load_ads_2.sticky {
-                                position: fixed;
-                                top: 0;
-                            }
-
-                            #scrollbar2 .viewport {
-                                height: 1000px !important;
-                            }
-                        </style>
-                        <script>
-                            var leftamt;
-                            function scrollFunction() {
-                                var scamt = (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-                                var element = document.getElementById("media.net sticky ad");
-                                if (scamt > leftamt) {
-                                    var leftPosition = element.getBoundingClientRect().left;
-                                    element.className = element.className.replace(/(?:^|\s)fixclass(?!\S)/g, '');
-                                    element.className += " fixclass";
-                                    element.style.left = leftPosition + 'px';
-                                }
-                                else {
-                                    element.className = element.className.replace(/(?:^|\s)fixclass(?!\S)/g, '');
-                                }
-                            }
-                            function getElementTopLeft(id) {
-                                var ele = document.getElementById(id);
-                                var top = 0;
-                                var left = 0;
-                                while (ele.tagName != "BODY") {
-                                    top += ele.offsetTop;
-                                    left += ele.offsetLeft;
-                                    ele = ele.offsetParent;
-                                }
-                                return { top: top, left: left };
-                            }
-                            function abcd() {
-                                TopLeft = getElementTopLeft("media.net sticky ad");
-                                leftamt = TopLeft.top;
-                                //leftamt -= 10;
-                            }
-                            window.onload = abcd;
-                            window.onscroll = scrollFunction;
-                        </script>
-                        <?php require_once('./php/include/sub-category.html'); ?>
-                    </section>
-                </section>
-                <div class="clr"></div>
-                <footer>
-                    <div class="menu_bottom">
-                        <a href="/about-us.html">
-                            <h3>Abouts us</h3>
-                        </a>
-                        <a href="/contact-us.html">
-                            <h3>Contact us</h3>
-                        </a>
-                        <a href="/privacy.html">
-                            <h3>Privacy</h3>
-                        </a>
-                    </div>
-                    <div class="croll">
-                        <div class="big"><i class="icongec-backtop"></i></div>
-                        <div class="small"><i class="icongec-backtop_mb"></i></div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-    </div>
-    <div id="off_light"></div>
-    <div class="clr"></div>
-    <div class="mask"></div>
-        <script type="text/javascript" src="<?=$base_url?>/js/files/combo.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/video.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
-    <?php include('./php/include/footer.php')?>
-
-    <script type="text/javascript" src="<?=$base_url?>/js/files/jqueryTooltip.js"></script>
-    <script type="text/javascript">
-        $(".listing li[title]").tooltip({ offset: [10, 200], effect: 'slide', predelay: 300 }).dynamic({ bottom: { direction: 'down', bounce: true } });
-    </script>
-    <style type="text/css">
-        .hide {
-            display: none;
-        }
-
-        .anime_list_body,
-        .anime_list_body ul {
-            width: 100%;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            -mos-box-sizing: border-box;
-        }
-
-        .anime_list_body ul li,
-        .anime_list_body ul li a {
-            white-space: nowrap;
-            overflow: hidden;
-            padding-right: 10px;
-            display: block;
-        }
-
-        .anime_list_body {
-            padding: 14px 18px;
-        }
-
-        .anime_list_body ul li a {
-            line-height: 115%;
-        }
-    </style>
-
-    <script>
-        if (document.getElementById('scrollbar2')) {
-            $('#scrollbar2').tinyscrollbar();
-        }
-    </script>
-</body>
-
-</html>

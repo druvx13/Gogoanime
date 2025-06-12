@@ -1,0 +1,18 @@
+<nav class="menu_recent">
+  <ul>
+    {% for recentRelease in recentReleases %}
+    <li>
+      <a href="/{{ recentRelease.episodeId }}" title="{{ recentRelease.name }}">
+        <div class="thumbnail-recent"
+          style="background: url('{{ recentRelease.imgUrl }}');"></div>
+        {{ recentRelease.name }}
+      </a>
+      <a href="/{{ recentRelease.episodeId }}" title="{{ recentRelease.name }}">
+        <p class="time_2">Episode {{ recentRelease.episodeNum }}</p>
+      </a>
+    </li>
+    {% else %}
+    <li>No recent releases available.</li> {# Optional: display a message if the loop is empty #}
+    {% endfor %}
+  </ul>
+</nav>

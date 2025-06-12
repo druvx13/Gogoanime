@@ -13,37 +13,37 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
 <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="<?=$base_url?>/img/favicon.ico">
+        <link rel="shortcut icon" href="<?php echo $base_url?>/img/favicon.ico">
 
 
-        <title>List of <?=$subCategory?> at Gogoanime</title>
+        <title>List of <?php echo $subCategory?> at Gogoanime</title>
 
         <meta name="robots" content="noodp, noydir" />
-        <meta name="description" content="List of <?=$subCategory?> at Gogoanime">
+        <meta name="description" content="List of <?php echo $subCategory?> at Gogoanime">
         <meta name="keywords" content="List genre Anime, Anime Movies">
-        <meta itemprop="image" content="<?=$base_url?>/img/logo.png" />
+        <meta itemprop="image" content="<?php echo $base_url?>/img/logo.png" />
 
         <meta property="og:site_name" content="Gogoanime" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="List of <?=$subCategory?> at Gogoanime" />
-        <meta property="og:description" content="List of <?=$subCategory?> at Gogoanime">
+        <meta property="og:title" content="List of <?php echo $subCategory?> at Gogoanime" />
+        <meta property="og:description" content="List of <?php echo $subCategory?> at Gogoanime">
         <meta property="og:url" content="" />
-        <meta property="og:image" content="<?=$base_url?>/img/logo.png" />
-        <meta property="og:image:secure_url" content="<?=$base_url?>/img/logo.png" />
+        <meta property="og:image" content="<?php echo $base_url?>/img/logo.png" />
+        <meta property="og:image:secure_url" content="<?php echo $base_url?>/img/logo.png" />
 
         <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content="List of <?=$subCategory?> at Gogoanime" />
-        <meta property="twitter:description" content="List of <?=$subCategory?> at Gogoanime" />
+        <meta property="twitter:title" content="List of <?php echo $subCategory?> at Gogoanime" />
+        <meta property="twitter:description" content="List of <?php echo $subCategory?> at Gogoanime" />
 
-        <link rel="canonical" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
-        <link rel="alternate" hreflang="en-us" href="<?=$base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+        <link rel="canonical" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
+        <link rel="alternate" hreflang="en-us" href="<?php echo $base_url?><?php echo $_SERVER['REQUEST_URI'] ?>" />
 
 
 
-        <link rel="stylesheet" type="text/css" href="<?=$base_url?>/css/style.css?v=7.1" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url?>/css/style.css?v=7.1" />
 
-        <script type="text/javascript" src="<?=$base_url?>/js/libraries/jquery.js"></script>
+        <script type="text/javascript" src="<?php echo $base_url?>/js/libraries/jquery.js"></script>
         <script>
                 var base_url = 'https://' + document.domain + '/';
                 var base_url_cdn_api = 'https://ajax.gogocdn.net/';
@@ -65,7 +65,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
                                                 <div class="main_body">
                                                         <div class="anime_name anime_movies">
                                                                 <i class="icongec-anime_movies i_pos"></i>
-                                                                <h2><?=$subCategory?></h2>
+                                                                <h2><?php echo $subCategory?></h2>
                                                                 <div class="anime_name_pagination">
                                                                         <div class="pagination">
                                                                                 <ul class='pagination-list'><?php $pagination = file_get_contents("$apiLink/subCategoryPage?page=$page&subCategory=$id");$pagination = json_decode($pagination, true); echo str_replace("active","selected",$pagination['pagination']) ?>
@@ -83,15 +83,15 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
                                                                         <li>
 
                                                                                 <div class="img">
-                                                                                        <a href="/category/<?=$genre['animeId']?>"
-                                                                                                title="<?=$genre['animeTitle']?>">
-                                                                                                <img src="<?=$genre['imgUrl']?>"
-                                                                                                        alt="<?=$genre['animeTitle']?>" />
+                                                                                        <a href="/category/<?php echo $genre['animeId']?>"
+                                                                                                title="<?php echo $genre['animeTitle']?>">
+                                                                                                <img src="<?php echo $genre['imgUrl']?>"
+                                                                                                        alt="<?php echo $genre['animeTitle']?>" />
                                                                                         </a>
                                                                                 </div>
-                                                                                <p class="name"><a href="/category/<?=$genre['animeId']?>" title="<?=$genre['animeTitle']?>"><?=$genre['animeTitle']?></a>
+                                                                                <p class="name"><a href="/category/<?php echo $genre['animeId']?>" title="<?php echo $genre['animeTitle']?>"><?php echo $genre['animeTitle']?></a>
                                                                                 </p>
-                                                                                <p class="released"><?=$genre['status']?></p>
+                                                                                <p class="released"><?php echo $genre['status']?></p>
                                                                         </li>
                                                                 <?php } ?>
                                                                 </ul>
@@ -211,9 +211,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1;
         <div id="off_light"></div>
         <div class="clr"></div>
         <div class="mask"></div>
-            <script type="text/javascript" src="<?=$base_url?>/js/files/combo.js"></script>
-    <script type="text/javascript" src="<?=$base_url?>/js/files/video.js"></script>
-        <script type="text/javascript" src="<?=$base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
+            <script type="text/javascript" src="<?php echo $base_url?>/js/files/combo.js"></script>
+    <script type="text/javascript" src="<?php echo $base_url?>/js/files/video.js"></script>
+        <script type="text/javascript" src="<?php echo $base_url?>/js/files/jquery.tinyscrollbar.min.js"></script>
         <?php include('../php/include/footer.php')?>
         <script>
                 if (document.getElementById('scrollbar2')) {

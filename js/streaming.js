@@ -1,163 +1,49 @@
-// const url = window.location.pathname.replace("/", "");
-const url = "naruto-episode-1";
+(function() {
+    'use strict';
 
-// Base New API URL
-const apiURl = "https://animeapi-9qlo.onrender.com"; 
+    // const url = window.location.pathname.replace("/", ""); // Original, naive URL parsing. Now handled by PHP.
+    // const url = "naruto-episode-1"; // Hardcoded test value
 
-// Prxy URL
-const prxyUrl = "https://gogo.druvx13.workers.dev/?u=";
+    // Base New API URL - This is different from the one now intended via ApiClient
+    // const apiURl = "https://animeapi-9qlo.onrender.com";
 
-// Construct the final API URL through the prxy
-const apiUrlEpisodeDetail = `${prxyUrl}${encodeURIComponent(`${apiURl}/getEpisode/${url}`)}`;
+    // Prxy URL - Proxying should ideally be handled server-side by ApiClient or not at all if direct calls are feasible.
+    // const prxyUrl = "https://gogo.druvx13.workers.dev/?u=";
 
-function loadEpisodeDetail() {
-    async function loadDetail() {
-        const response = await fetch(apiUrlEpisodeDetail);
-        const episodeDetail = await response.json();
-        document.title = `${episodeDetail['animenamewithep']} at GogoAnime`;
-        const iframez = document.getElementById('iframez');
-        iframez.setAttribute('src', `${episodeDetail['video']}`);
-        const dowloads = document.getElementById('dowloads');
-        dowloads.setAttribute('href', `${episodeDetail['ep_download']}`);
-        const animeCategory = document.getElementById('animeCategory');
-        animeCategory.setAttribute('href', `${episodeDetail['anime_info']}`);
-        const animeTitle = document.getElementById("animeTitle");
-        animeTitle.innerHTML = `${episodeDetail['animenamewithep']}`;
-        const animeTitle2 = document.getElementById('animeTitle2');
-        animeTitle2.innerHTML = `<h1>${episodeDetail['animenamewithep']} at GogoAnime</h1>`;
+    // Construct the final API URL through the prxy
+    // const apiUrlEpisodeDetail = `${prxyUrl}${encodeURIComponent(`${apiURl}/getEpisode/${url}`)}`;
 
-        // Example - ${episodeDetail['anime_info']} - category/naruto
-        let animeCategoryName = `${episodeDetail['anime_info']}`;
-        function animeDetails() {
-            const apiUrlAnimeDetails = `${proxyUrl}${encodeURIComponent(`${apiURl}/getAnime/${animeCategoryName.replace("/category/", "")}`)}`;
-            
-            async function loadAnimeDetails() {
-                const response = await fetch(apiUrlAnimeDetails);
-                const animeDetail = await response.json();
-                animeCategory.innerHTML = `${animeDetail['name']}`;
-                animeCategory.setAttribute('title', `${animeDetail['name']}`);
-                let aboutAnime = `${animeDetail['about']}`;
-                let aboutAnimeFinal = aboutAnime.replace("Plot Summary: ", "");
+    // The functionality of this script (fetching episode details, anime details, recent releases,
+    // and updating the DOM including meta tags) is now largely handled by server-side rendering
+    // via streaming.php, ApiClient.php, and Twig templates.
+    // Running this script as-is would conflict with server-rendered content and make redundant API calls
+    // to a different API source (api-indianime.herokuapp.com vs the one configured in ApiClient).
 
-                function metaHeadTag() {
-                    let itemprop = document.createElement('meta');
-                    itemprop.setAttribute('itemprop', 'image');
-                    itemprop.setAttribute('content', `${animeDetail['img_url']}`);
-                    document.getElementsByTagName('head')[0].appendChild(itemprop);
+    // Meta tags should be rendered server-side for SEO.
+    // Video player iframe source and episode lists are now rendered server-side.
 
-                    let ogtitle = document.createElement('meta');
-                    ogtitle.setAttribute('property', 'og:title');
-                    ogtitle.setAttribute('content', `Watch ${episodeDetail['animenamewithep']} at GogoAnime`);
-                    document.getElementsByTagName('head')[0].appendChild(ogtitle);
+    // Therefore, the automatic execution of its functions is commented out.
+    // If any specific client-side UI interactions from this script are still uniquely required
+    // (beyond what main.js or other global scripts provide, e.g. for video server switching),
+    // those specific parts would need to be identified and carefully reintegrated.
+    // For now, neutralizing the script is the safest approach.
 
-                    let ogdescription = document.createElement('meta');
-                    ogdescription.setAttribute('property', 'og:description');
-                    ogdescription.setAttribute('content', `${aboutAnimeFinal}`);
-                    document.getElementsByTagName('head')[0].appendChild(ogdescription);
-
-                    let ogimage = document.createElement('meta');
-                    ogimage.setAttribute('property', 'og:image');
-                    ogimage.setAttribute('content', `${animeDetail['img_url']}`);
-                    document.getElementsByTagName('head')[0].appendChild(ogimage);
-                }
-                metaHeadTag();
-
-                // Episode List 
-                function loadEpisode() {
-                    let episodes = animeDetail['episode_id'];
-                    let episode_related = document.getElementById('episode_related');
-                    let episodeHTML = "";
-                    let episodeContent;
-                    episodes.forEach(function (element, index) {
-                        let activeClass = element == url ? "active" : "";
-                        episodeContent = `
-                        <li>
-                            <a href="${element}" class="${activeClass}">
-                                <div class="name"><span>EP</span> ${index + 1}</div>
-                                <div class="vien"></div>
-                                <div class="cate">SUB</div>
-                            </a>
-                        </li>
-                        `;
-                        episodeHTML += episodeContent;
-                    });
-                    episode_related.innerHTML = episodeHTML;
-
-                    function previousEpisode() {
-                        let anime_video_body_episodes_l = document.getElementById('anime_video_body_episodes_l');
-                        const epNumber = episodeDetail['ep_num'];
-                        const prevEpisode = epNumber - 1;
-                        const arrayLink = prevEpisode - 1;
-                        
-                        let previosHTML = "";
-                        let previosHTMLContent;
-                        if (prevEpisode > 0) {
-                            previosHTMLContent = `
-                               <a href="${episodes[arrayLink]}">
-                                  &lt;&lt; ${animeDetail['name']} Episode ${parseInt(episodeDetail['ep_num']) - 1}
-                               </a>
-                            `;
-                        } else {
-                            previosHTMLContent = "";
-                        }
-                        previosHTML += previosHTMLContent;
-                        anime_video_body_episodes_l.innerHTML = previosHTML;
-                    }
-                    previousEpisode();
-
-                    function nextEpisode(){
-                        let anime_video_body_episodes_r = document.getElementById('anime_video_body_episodes_r');
-                        let lastEpisode = animeDetail['episode_id'].length;
-                        let nextEpisodeHTML = "";
-                        let nextEpisodeContent;
-                        let currentEpisode = parseInt(episodeDetail['ep_num']);
-                        if (currentEpisode < lastEpisode){
-                            nextEpisodeContent = `
-                             <a href="${episodes[parseInt(episodeDetail['ep_num'])]}">
-                               ${animeDetail['name']} Episode ${parseInt(episodeDetail['ep_num']) + 1} >>
-                             </a>
-                            `;
-                        } else {
-                            nextEpisodeContent = "";
-                        }
-                        nextEpisodeHTML += nextEpisodeContent;
-                        anime_video_body_episodes_r.innerHTML = nextEpisodeHTML;
-                    }
-                    nextEpisode();
-                }
-                loadEpisode();
-            }
-            loadAnimeDetails();
-        }
-        animeDetails();
-        return episodeDetail;
+    /*
+    function loadEpisodeDetail() {
+        // ... (original function content) ...
     }
-    loadDetail();
-}
 
-loadEpisodeDetail();
-function loadRecentRelease() {
-    async function loadRecent() {
-        const apiUrlRecentReleases = `${prxyUrl}${encodeURIComponent(`${apiURl}/getRecent/1`)}`;
-        const response = await fetch(apiUrlRecentReleases);
-        const recentReleases = await response.json();
-        const recentEpisodesContainer = document.getElementById('recentEpisodes');
-        let recentEpisodesHTML = "";
-        recentReleases.forEach(function (element) {
-            recentEpisodesHTML += `
-            <li>
-             <a href="${element['r_anime_id']}" title="${element['r_name']}">
-              <div class="thumbnail-recent" style="background: url('${element['r_img_url']}');"></div>
-              ${element['r_name']}
-             </a>
-             <a href="${element['r_anime_id']}" title="${element['r_name']}">
-              <p class="time_2">${element['episode_num']}</p>
-             </a>
-            </li>
-            `;
-        });
-        recentEpisodesContainer.innerHTML = recentEpisodesHTML;
+    // loadEpisodeDetail(); // Deactivated
+
+    function loadRecentRelease() {
+        // ... (original function content) ...
     }
-    loadRecent();
-}
-loadRecentRelease();
+    // loadRecentRelease(); // Deactivated
+    */
+
+    // Note: Disqus loading is typically handled by a script tag in the main HTML/Twig template.
+    // If this specific loadDisqus() function was intended for a dynamic load button or something,
+    // it would need to be re-evaluated in context of the Twig structure.
+    // The DISQUS_SHORTNAME is now passed from PHP to streaming.html.twig.
+
+})();
